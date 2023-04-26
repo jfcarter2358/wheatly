@@ -3,37 +3,34 @@ data = {
         "parser_description": "MOC Devops CLI",
         "subparser_title": "commands",
         "subparser_dest": "command",
-        "subparser_description": "valid commands"
+        "subparser_description": "valid commands",
     },
     "subcommands": {
         "generate": {
             "meta": {
                 "description": "Parse NL test file and generate test JSON",
                 "help": "Parse NL test file and generate test JSON",
-                "function": {
-                    "name": "generate",
-                    "args": {}
-                },
-                "requires": {}
+                "function": {"name": "generate", "args": {}},
+                "requires": {},
             },
             "args": {
                 "input": {
                     "short": "-i",
                     "long": "--input",
                     "help": "Input file",
-                    "required": True
+                    "required": True,
                 },
                 "output": {
                     "short": "-o",
                     "long": "--output",
                     "help": "Output file",
-                    "required": True
+                    "required": True,
                 },
                 "plugins": {
                     "short": "-p",
                     "long": "--plugins",
                     "help": "Plugin directory",
-                    "required": True
+                    "required": True,
                 },
                 "log_level": {
                     "short": "-l",
@@ -48,39 +45,36 @@ data = {
                         "SUCCESS",
                         "INFO",
                         "DEBUG",
-                        "TRACE"
-                    ]
-                }
-            }
+                        "TRACE",
+                    ],
+                },
+            },
         },
         "run": {
             "meta": {
                 "description": "Run test JSON file",
                 "help": "Run test JSON file",
-                "function": {
-                    "name": "run",
-                    "args": {}
-                },
-                "requires": {}
+                "function": {"name": "run", "args": {}},
+                "requires": {},
             },
             "args": {
                 "input": {
                     "short": "-i",
                     "long": "--input",
                     "help": "Input file",
-                    "required": True
+                    "required": True,
                 },
                 "plugins": {
                     "short": "-p",
                     "long": "--plugins",
                     "help": "Plugin directory",
-                    "required": True
+                    "required": True,
                 },
                 "dump-results": {
                     "short": "-d",
                     "long": "--dump",
                     "help": "Should we dump a file with the results of the test run",
-                    "action": "store_true"
+                    "action": "store_true",
                 },
                 "log_level": {
                     "short": "-l",
@@ -95,10 +89,10 @@ data = {
                         "SUCCESS",
                         "INFO",
                         "DEBUG",
-                        "TRACE"
-                    ]
-                }
-            }
-        }
-    }
+                        "TRACE",
+                    ],
+                },
+            },
+        },
+    },
 }

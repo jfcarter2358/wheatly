@@ -2,23 +2,26 @@ import wheatly.utils as utils
 from wheatly.errors import TestError
 import copy
 
+
 def _get_object_matches(objects, text):
     # parse text to unigrams and bigrams
-    unigrams = text.split(' ')
-    bigrams = [(u, unigrams[i + 1]) for i, u in enumerate(unigrams) if i < len(unigrams) - 1]
+    unigrams = text.split(" ")
+    bigrams = [
+        (u, unigrams[i + 1]) for i, u in enumerate(unigrams) if i < len(unigrams) - 1
+    ]
     out = []
     to_replace = []
 
     # give priority to bigrams
     # for example,
-    # 'spark runtime' is more descriptive than 
+    # 'spark runtime' is more descriptive than
     # 'runtime'
     for b in bigrams:
         for o in objects:
             for x in objects[o].tokens:
                 if x == b:
                     out.append(objects[o].name)
-                    to_replace.append(' '.join(x))
+                    to_replace.append(" ".join(x))
 
     # remove all the bigrams we found
     # if we found 'sagemaker runtime'
@@ -26,7 +29,7 @@ def _get_object_matches(objects, text):
     for tr in to_replace:
         text = text.replace(tr)
 
-    unigrams = text.split(' ')
+    unigrams = text.split(" ")
 
     # finally check the remaining text for single-word matches
     for o in objects:
@@ -35,16 +38,19 @@ def _get_object_matches(objects, text):
                 out.append(objects[o].name)
     return out
 
+
 def _get_action_matches(objects, text):
     # parse text to unigrams and bigrams
-    unigrams = text.split(' ')
-    bigrams = [(u, unigrams[i + 1]) for i, u in enumerate(unigrams) if i < len(unigrams) - 1]
+    unigrams = text.split(" ")
+    bigrams = [
+        (u, unigrams[i + 1]) for i, u in enumerate(unigrams) if i < len(unigrams) - 1
+    ]
     out = []
     to_replace = []
 
     # give priority to bigrams
     # for example,
-    # 'spark runtime' is more descriptive than 
+    # 'spark runtime' is more descriptive than
     # 'runtime'
     for b in bigrams:
         for o in objects:
@@ -52,7 +58,7 @@ def _get_action_matches(objects, text):
                 for x in objects[o].actions[k]:
                     if x == b:
                         out.append(k)
-                        to_replace.append(' '.join(x))
+                        to_replace.append(" ".join(x))
 
     # remove all the bigrams we found
     # if we found 'sagemaker runtime'
@@ -60,7 +66,7 @@ def _get_action_matches(objects, text):
     for tr in to_replace:
         text = text.replace(tr)
 
-    unigrams = text.split(' ')
+    unigrams = text.split(" ")
 
     # finally check the remaining text for single-word matches
     for o in objects:
@@ -70,16 +76,19 @@ def _get_action_matches(objects, text):
                     out.append(k)
     return out
 
+
 def _get_modifier_matches(objects, text):
     # parse text to unigrams and bigrams
-    unigrams = text.split(' ')
-    bigrams = [(u, unigrams[i + 1]) for i, u in enumerate(unigrams) if i < len(unigrams) - 1]
+    unigrams = text.split(" ")
+    bigrams = [
+        (u, unigrams[i + 1]) for i, u in enumerate(unigrams) if i < len(unigrams) - 1
+    ]
     out = []
     to_replace = []
 
     # give priority to bigrams
     # for example,
-    # 'spark runtime' is more descriptive than 
+    # 'spark runtime' is more descriptive than
     # 'runtime'
     for b in bigrams:
         for o in objects:
@@ -87,7 +96,7 @@ def _get_modifier_matches(objects, text):
                 for x in objects[o].modifiers[k]:
                     if x == b:
                         out.append(k)
-                        to_replace.append(' '.join(x))
+                        to_replace.append(" ".join(x))
 
     # remove all the bigrams we found
     # if we found 'sagemaker runtime'
@@ -95,7 +104,7 @@ def _get_modifier_matches(objects, text):
     for tr in to_replace:
         text = text.replace(tr)
 
-    unigrams = text.split(' ')
+    unigrams = text.split(" ")
 
     # finally check the remaining text for single-word matches
     for o in objects:
@@ -104,6 +113,7 @@ def _get_modifier_matches(objects, text):
                 if x in unigrams:
                     out.append(k)
     return out
+
 
 # parse text only text
 def process_raw_text(instruction, objects, index):
@@ -115,21 +125,22 @@ def process_raw_text(instruction, objects, index):
 
     # parse it for everything we need
     out = {
-        'actions': utils.dedupe_list(_get_action_matches(objs, clean_text)),
-        'args': {},
-        'modifiers': _get_modifier_matches(objs, clean_text),
-        'objects': object_names,
-        'text': instruction,
-        'type': 'text'
+        "actions": utils.dedupe_list(_get_action_matches(objs, clean_text)),
+        "args": {},
+        "modifiers": _get_modifier_matches(objs, clean_text),
+        "objects": object_names,
+        "text": instruction,
+        "type": "text",
     }
 
     # check that we found something
-    if len(out['objects']) == 0:
-        raise TestError(f'No objects found in instruction {index}')
-    if len(out['actions']) == 0:
-        raise TestError(f'No actions found in instruction {index}')
+    if len(out["objects"]) == 0:
+        raise TestError(f"No objects found in instruction {index}")
+    if len(out["actions"]) == 0:
+        raise TestError(f"No actions found in instruction {index}")
 
     return copy.deepcopy(out)
+
 
 # parse text with dictionary args
 def process_text(instruction, objects, index):
@@ -140,50 +151,46 @@ def process_text(instruction, objects, index):
 
     # parse it for everything we need
     out = {
-        'actions': utils.dedupe_list(_get_action_matches(objects, clean_text)),
-        'args': instruction[key],
-        'modifiers': _get_modifier_matches(objects, clean_text),
-        'objects': _get_object_matches(objects, clean_text),
-        'text': key,
-        'type': 'text'
+        "actions": utils.dedupe_list(_get_action_matches(objects, clean_text)),
+        "args": instruction[key],
+        "modifiers": _get_modifier_matches(objects, clean_text),
+        "objects": _get_object_matches(objects, clean_text),
+        "text": key,
+        "type": "text",
     }
 
     # check that we found something
-    if len(out['objects']) == 0:
-        raise TestError(f'No objects found in instruction {index}')
-    if len(out['actions']) == 0:
-        raise TestError(f'No actions found in instruction {index}')
+    if len(out["objects"]) == 0:
+        raise TestError(f"No objects found in instruction {index}")
+    if len(out["actions"]) == 0:
+        raise TestError(f"No actions found in instruction {index}")
 
     return copy.deepcopy(out)
 
 
 # process wait action
 def process_wait(instruction):
-    out = {
-        'duration': instruction['wait'],
-        'type': 'wait'
-    }
+    out = {"duration": instruction["wait"], "type": "wait"}
     return copy.deepcopy(out)
+
 
 def process_curl(instruction, index):
-    
-    required = ['data', 'host', 'method', 'path']
-    utils.check_required(instruction['curl'], required, index)
+    required = ["data", "host", "method", "path"]
+    utils.check_required(instruction["curl"], required, index)
 
     out = {
-        'args': {
-            'assert': utils.check_arg(instruction['curl'], 'assert')
-        },
-        'data': utils.check_arg(instruction['curl'], 'data'),
-        'host': instruction['curl']['host'],
-        'method': instruction['curl']['method'],
-        'path': instruction['curl']['path'],
-        'type': 'curl',
-        'response_type': instruction['curl']['response_type']
+        "args": {"assert": utils.check_arg(instruction["curl"], "assert")},
+        "data": utils.check_arg(instruction["curl"], "data"),
+        "host": instruction["curl"]["host"],
+        "method": instruction["curl"]["method"],
+        "path": instruction["curl"]["path"],
+        "type": "curl",
+        "response_type": instruction["curl"]["response_type"],
     }
-    if not out['args']['assert']:
-        del out['args']['assert']
+    if not out["args"]["assert"]:
+        del out["args"]["assert"]
     return copy.deepcopy(out)
+
 
 def process_conditional():
     pass
