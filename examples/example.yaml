@@ -1,0 +1,16 @@
+tests:
+  example:
+    # Execute some HTTP request
+    - curl:
+        host: https://pypi.org
+        path: project/wheatly
+        method: get
+        # Set this to a dictionary if you want to send some JSON data alone with the request
+        data: ~
+        response_type: html
+    # Execute a wait with the duration in seconds
+    - wait: 5
+    # Text of what to do
+    - get a model:
+        # Optional dictionary for any arguments you want to pass along
+        foo: bar
